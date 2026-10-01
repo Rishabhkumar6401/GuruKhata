@@ -1,4 +1,4 @@
-// FeesBook API server.
+// GuruKhata API server.
 // Runs locally with `node src/server.js`; later wrapped with serverless-http
 // on AWS Lambda (Function URL) — that's why the Express app is exported and
 // `listen()` only happens when this file is executed directly.
@@ -53,7 +53,7 @@ app.use((err, req, res, next) => {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const port = Number(process.env.PORT) || 3000;
   app.listen(port, () => {
-    console.log(`FeesBook API listening on http://localhost:${port}`);
+    console.log(`GuruKhata API listening on http://localhost:${port}`);
   });
 }
 

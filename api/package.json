@@ -1,8 +1,8 @@
 {
-  "name": "feesbook-api",
+  "name": "gurukhata-api",
   "version": "0.1.0",
   "private": true,
-  "description": "FeesBook API — Express app, deployed to AWS Lambda via serverless-http later, runs locally with plain node.",
+  "description": "GuruKhata API — Express app, deployed to AWS Lambda via serverless-http later, runs locally with plain node.",
   "type": "module",
   "main": "src/server.js",
   "scripts": {

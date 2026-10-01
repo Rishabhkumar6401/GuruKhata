@@ -1,6 +1,6 @@
-# feesbook-api
+# gurukhata-api
 
-Express API for FeesBook. Plain JS + ESM, runs locally with bare Node; later deployed to AWS Lambda via `serverless-http` (the app is exported from `src/server.js` for exactly that).
+Express API for GuruKhata. Plain JS + ESM, runs locally with bare Node; later deployed to AWS Lambda via `serverless-http` (the app is exported from `src/server.js` for exactly that).
 
 ## Quickstart
 

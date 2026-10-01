@@ -1,4 +1,4 @@
-// FeesBook shared message templates — used by BOTH the web app (wa.me deep
+// GuruKhata shared message templates — used by BOTH the web app (wa.me deep
 // links the tutor taps) and the api (reminder channel audit, Phase 4 Cloud
 // API). Dependency-free, plain ESM.
 //

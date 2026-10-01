@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://PLACEHOLDER-DOMAIN/sitemap.xml
+Sitemap: https://gurukhata.pages.dev/sitemap.xml

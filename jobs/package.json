@@ -1,8 +1,8 @@
 {
-  "name": "feesbook-jobs",
+  "name": "gurukhata-jobs",
   "version": "0.1.0",
   "private": true,
-  "description": "FeesBook scheduled jobs — plain scripts locally, Lambda + EventBridge cron later.",
+  "description": "GuruKhata scheduled jobs — plain scripts locally, Lambda + EventBridge cron later.",
   "type": "module",
   "dependencies": {
     "pg": "^8.13.0"

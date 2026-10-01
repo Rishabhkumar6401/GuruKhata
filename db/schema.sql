@@ -1,4 +1,4 @@
--- FeesBook — Postgres schema v1 (from docs/ARCHITECTURE.md "Data model (v1)").
+-- GuruKhata — Postgres schema v1 (from docs/ARCHITECTURE.md "Data model (v1)").
 -- Idempotent: IF NOT EXISTS everywhere, safe to re-apply:
 --   psql "$DATABASE_URL" -f db/schema.sql
 --

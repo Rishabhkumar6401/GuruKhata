@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO: replace PLACEHOLDER-DOMAIN with the real domain (or feesbook.pages.dev) before submitting to Google Search Console -->
+<!-- TODO: replace gurukhata.pages.dev with the real domain (or gurukhata.pages.dev) before submitting to Google Search Console -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://PLACEHOLDER-DOMAIN/</loc><priority>1.0</priority></url>
-  <url><loc>https://PLACEHOLDER-DOMAIN/receipt/</loc><priority>0.9</priority></url>
-  <url><loc>https://PLACEHOLDER-DOMAIN/register/</loc><priority>0.9</priority></url>
+  <url><loc>https://gurukhata.pages.dev/</loc><priority>1.0</priority></url>
+  <url><loc>https://gurukhata.pages.dev/receipt/</loc><priority>0.9</priority></url>
+  <url><loc>https://gurukhata.pages.dev/register/</loc><priority>0.9</priority></url>
 </urlset>

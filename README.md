@@ -42,7 +42,7 @@ docs/     planning docs (see below)
 
 ## Deploy (Phase 1)
 Cloudflare Pages → connect repo → build command: none → output directory: `site`.
-⚠️ Before deploy: replace `91XXXXXXXXXX` (WhatsApp pilot number) in site/index.html and `PLACEHOLDER-DOMAIN` in canonicals/robots/sitemap.
+⚠️ Before deploy: replace `91XXXXXXXXXX` (WhatsApp pilot number) in site/index.html and `gurukhata.pages.dev` in canonicals/robots/sitemap.
 
 ## Docs
 - [docs/ROADMAP.md](docs/ROADMAP.md) — phases 0→5 with exit criteria
