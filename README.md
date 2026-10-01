@@ -28,23 +28,47 @@ Attendance, homework, test marks, student-getting campaigns, auto-send via Whats
 ## Repo layout
 ```
 site/     Phase 1 — static site: landing + free tools (receipt generator, printable fees register)
-          zero dependencies, deploys as-is to Cloudflare Pages (build dir: site/)
-api/      Express API skeleton (plain JS, ESM) — Phase 2
-jobs/     cron scripts (monthly dues generation) — Phase 2
-shared/   WhatsApp message templates + wa.me link builder
+          zero dependencies, deploys as-is to Cloudflare Pages (output dir: site/)
+web/      Phase 2 — teacher app: mobile PWA (Vite + React, plain JS)
+api/      Phase 2 — Express API (plain JS, ESM) + node:test suite
+jobs/     monthly dues generation (optional cron; the API also generates lazily)
+shared/   WhatsApp reminder templates + wa.me link builder (used by api AND web)
 db/       Postgres schema (idempotent schema.sql)
-docs/     planning docs (see below)
+docs/     roadmap, architecture, API contract, free-tier plan
 ```
 
-## Run locally
-- Site: `npx serve site` (or any static server) → http://localhost:3000
-- API: see api/README.md
+## Run locally (no database or accounts needed)
+The API uses PGlite (real Postgres inside Node) when `DATABASE_URL` is empty.
 
-## Deploy (Phase 1)
-Cloudflare Pages → connect repo → build command: none → output directory: `site`.
-⚠️ Before deploy: replace `91XXXXXXXXXX` (WhatsApp pilot number) in site/index.html and `gurukhata.pages.dev` in canonicals/robots/sitemap.
+```bash
+# terminal 1 — API on :3000, name-only "dev login", "Rohan" becomes admin
+cd api && npm install && DEV_AUTH=1 ADMIN_DEV_NAMES=Rohan npm run dev
+
+# terminal 2 — teacher app on :5173
+cd web && npm install && npm run dev
+```
+Open http://localhost:5173 and log in with any name.
+
+**Ports 3000/5173 already busy** (e.g. other projects running)? Use different ones — all three values must agree:
+```bash
+cd api && DEV_AUTH=1 ADMIN_DEV_NAMES=Rohan PORT=3100 CORS_ORIGINS=http://localhost:5200 npm run dev
+cd web && VITE_API_URL=http://localhost:3100 npx vite --port 5200
+```
+→ http://localhost:5200
+
+- Tests: `cd api && npm test`
+- Free-tools site: `npx serve site`
+- Reset local data: delete `api/.pglite-data/`
+
+## Deploy
+- **Site (Phase 1):** Cloudflare Pages → connect repo → build command: none → output directory: `site`.
+  ⚠️ Replace `91XXXXXXXXXX` (WhatsApp pilot number) in site/index.html first.
+- **API + app (Phase 2):** not deployed yet. Needs Neon (`DATABASE_URL`), `JWT_SECRET`, a Google OAuth client ID,
+  `CORS_ORIGINS` — see api/.env.example and web/.env.example. The app's production build refuses to run without
+  `VITE_API_URL` and `VITE_GOOGLE_CLIENT_ID`; the API refuses to boot with `DEV_AUTH` in production.
 
 ## Docs
 - [docs/ROADMAP.md](docs/ROADMAP.md) — phases 0→5 with exit criteria
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — stack, data model, backoffice/admin, key flows
+- [docs/API-CONTRACT.md](docs/API-CONTRACT.md) — every endpoint, request and response
 - [docs/FREE-TIER-INFRA.md](docs/FREE-TIER-INFRA.md) — every service, its free limit, and when money first appears

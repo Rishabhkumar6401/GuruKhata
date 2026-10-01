@@ -180,3 +180,22 @@ test('reactivating a student, or raising a ₹0 fee, bills from this month only 
   await t.api('GET', '/api/dues', { token: T.token });
   assert.deepEqual(Object.keys(await duesOf(quiet.id)), [ago(2), ago(1), now.month]);
 });
+
+test("changing a fee to ₹0 drops this month's open due (no '₹0 due' row); paid history is kept", async () => {
+  const T = await t.login('Fee To Zero Tutor');
+  const kabir = await addStudent(T.token, { name: 'Kabir', monthlyFee: 1200, dueDay: 28 });
+  await t.db.query(`INSERT INTO dues (student_id, month, amount, status) VALUES ($1, $2, 1200, 'paid')`, [kabir.id, ago(1)]);
+  await t.api('GET', '/api/dues', { token: T.token }); // lazy-generates this month's ₹1200 due
+  assert.equal((await duesOf(kabir.id))[now.month].amount, 1200);
+
+  const p = await t.api('PATCH', `/api/students/${kabir.id}`, { token: T.token, body: { monthlyFee: 0 } });
+  assert.equal(p.status, 200);
+
+  const rows = await duesOf(kabir.id);
+  assert.equal(rows[now.month], undefined, "this month's open due should be gone");
+  assert.deepEqual(rows[ago(1)], { amount: 1200, status: 'paid' }, 'paid history untouched');
+
+  const list = await t.api('GET', '/api/dues', { token: T.token });
+  assert.equal(list.body.dues.some((d) => d.studentId === kabir.id), false);
+  assert.equal(list.body.summary.expected, 0);
+});

@@ -34,7 +34,7 @@ export default function Uncollected() {
       ) : !dues ? (
         <Loading />
       ) : open.length === 0 ? (
-        <Empty title="All fees collected" text="Nothing pending from any month." />
+        <Empty title="Nothing pending" text="No unpaid fees from any month." />
       ) : (
         <>
           <div className="total-line">

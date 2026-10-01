@@ -112,6 +112,14 @@ router.patch('/:id', async (req, res) => {
             AND d.month = $3 AND d.status = 'due'`,
         [req.tutor.id, id, month]
       );
+      // Fee set to ₹0 → this month's still-open due would read "₹0 due"; drop it.
+      // Paid/waived history is never touched.
+      await tx.query(
+        `DELETE FROM dues d USING students s
+          WHERE s.id = d.student_id AND s.tutor_id = $1 AND s.id = $2
+            AND d.month = $3 AND d.status = 'due' AND d.amount = 0`,
+        [req.tutor.id, id, month]
+      );
     }
     if (!isBillable(before) && isBillable(after)) {
       await tx.query(

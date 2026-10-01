@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api.js';
 import { digits, inr, phoneDigits, prettyPhone, validPhone } from '../format.js';
 import { useToast } from '../state.jsx';
-import { ErrorState, Loading, TopBar } from '../components/ui.jsx';
+import { ErrorState, Loading, TopBar, useGoBack } from '../components/ui.jsx';
 
 const DEFAULT_DUE_DAY = 5; // matches contract default (flagged there as needing sign-off)
 
@@ -41,6 +41,7 @@ export default function StudentForm() {
   const { id } = useParams();
   const isNew = !id;
   const navigate = useNavigate();
+  const goBack = useGoBack('/students');
   const toast = useToast();
 
   const [orig, setOrig] = useState(null);
@@ -111,7 +112,7 @@ export default function StudentForm() {
         if (Object.keys(patch).length) await api.updateStudent(orig.id, patch);
         toast('Saved');
       }
-      navigate('/students', { replace: true });
+      goBack();
     } catch (err) {
       toast(err.message, 'error');
       setSaving(false);
@@ -148,7 +149,7 @@ export default function StudentForm() {
       }
       await api.deactivateStudent(orig.id);
       toast(writingOff ? `${orig.name} removed. ${inr(unpaidTotal)} written off.` : `${orig.name} removed`);
-      navigate('/students', { replace: true });
+      goBack();
     } catch (err) {
       toast(err.message, 'error');
       setRemoving(false);
@@ -160,7 +161,7 @@ export default function StudentForm() {
     try {
       await api.updateStudent(orig.id, { active: true });
       toast(`${orig.name} is active again`);
-      navigate('/students', { replace: true });
+      goBack();
     } catch (err) {
       toast(err.message, 'error');
       setRemoving(false);
