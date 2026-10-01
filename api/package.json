@@ -1,0 +1,17 @@
+{
+  "name": "feesbook-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FeesBook API — Express app, deployed to AWS Lambda via serverless-http later, runs locally with plain node.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "pg": "^8.13.0"
+  }
+}

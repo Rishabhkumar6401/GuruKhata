@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tuition Fees Receipt Generator – Free, Share on WhatsApp</title>
+  <meta name="description" content="Free tuition fees receipt maker for teachers and coaching classes in India. Fill student name, month and amount — get a professional fee receipt image to download or share on WhatsApp.">
+  <link rel="canonical" href="https://PLACEHOLDER-DOMAIN/receipt/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Free Tuition Fees Receipt Generator">
+  <meta property="og:description" content="Make a professional fee receipt in 30 seconds and share it on WhatsApp. Free, no sign-up.">
+  <meta property="og:url" content="https://PLACEHOLDER-DOMAIN/receipt/">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Fees<span>Book</span></a>
+    <nav><a href="/register/">Fees Register</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Tuition Fees Receipt Generator</h1>
+  <p class="lead">Fill the details, get a clean receipt image. Download it or share straight to WhatsApp. Free — no sign-up.</p>
+
+  <div class="card no-print">
+    <form class="tool" id="f" autocomplete="on">
+      <div>
+        <label for="inst">Your name / class name (shown on top)</label>
+        <input id="inst" placeholder="e.g. Sharma Tuition Classes" maxlength="40" required>
+      </div>
+      <div>
+        <label for="student">Student name</label>
+        <input id="student" placeholder="e.g. Riya Verma" maxlength="40" required>
+      </div>
+      <div>
+        <label for="month">Fee for month</label>
+        <input id="month" type="month">
+      </div>
+      <div>
+        <label for="amount">Amount (₹)</label>
+        <input id="amount" type="number" min="1" max="1000000" placeholder="e.g. 1500" required>
+      </div>
+      <div>
+        <label for="mode">Payment mode</label>
+        <select id="mode">
+          <option>UPI</option><option>Cash</option><option>Bank transfer</option><option>Other</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Make Receipt</button>
+    </form>
+  </div>
+
+  <div class="preview card" id="previewBox" hidden>
+    <canvas id="cv" width="1000" height="1250"></canvas>
+    <div class="cta-row no-print" style="justify-content:center">
+      <button class="btn btn-primary" id="dl">Download</button>
+      <button class="btn btn-wa" id="share">Share on WhatsApp</button>
+    </div>
+    <p class="hint no-print">Tip: "Share" opens your phone's share sheet — choose WhatsApp and the parent's chat.</p>
+  </div>
+
+  <div class="card no-print">
+    <h3>Tired of making receipts one by one?</h3>
+    <p>FeesBook (free pilot) marks fees paid and makes the receipt automatically — plus shows all pending fees batch-wise. <a href="/">Learn more →</a></p>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap"><a href="/">FeesBook</a> — the digital fees register for tuition & coaching classes</div></footer>
+
+<script>
+(function () {
+  var f = document.getElementById('f'), box = document.getElementById('previewBox');
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+
+  function nextReceiptNo() {
+    var n = 1;
+    try {
+      n = (parseInt(localStorage.getItem('fb_rno') || '0', 10) || 0) + 1;
+      localStorage.setItem('fb_rno', String(n));
+    } catch (e) { n = Math.floor(Math.random() * 900) + 100; }
+    var y = new Date().getFullYear();
+    return 'RC-' + y + '-' + String(n).padStart(4, '0');
+  }
+
+  function monthLabel(val) {
+    if (!val) return '—';
+    if (!/^\d{4}-\d{2}$/.test(val)) return val;
+    var p = val.split('-');
+    var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return names[parseInt(p[1], 10) - 1] + ' ' + p[0];
+  }
+
+  function draw(d) {
+    var W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    // background + border
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1f6f5c'; ctx.lineWidth = 10; ctx.strokeRect(20, 20, W - 40, H - 40);
+    // header band
+    ctx.fillStyle = '#1f6f5c'; ctx.fillRect(20, 20, W - 40, 170);
+    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center';
+    ctx.font = 'bold 52px system-ui, sans-serif';
+    ctx.fillText(d.inst, W / 2, 105, W - 120);
+    ctx.font = '30px system-ui, sans-serif';
+    ctx.fillText('FEE RECEIPT', W / 2, 160);
+    // meta row
+    ctx.fillStyle = '#5b6b7f'; ctx.font = '28px system-ui, sans-serif';
+    ctx.textAlign = 'left';  ctx.fillText('Receipt No: ' + d.rno, 70, 250);
+    ctx.textAlign = 'right'; ctx.fillText('Date: ' + d.date, W - 70, 250);
+    // body lines
+    function line(label, value, y, big) {
+      ctx.textAlign = 'left'; ctx.fillStyle = '#5b6b7f';
+      ctx.font = '30px system-ui, sans-serif'; ctx.fillText(label, 70, y);
+      ctx.fillStyle = '#1a2332';
+      ctx.font = (big ? 'bold 64px' : 'bold 38px') + ' system-ui, sans-serif';
+      ctx.fillText(value, 70, y + (big ? 85 : 48), W - 140);
+    }
+    line('Received from (student)', d.student, 340);
+    line('Towards tuition fee for', d.month, 480);
+    line('Payment mode', d.mode, 620);
+    line('Amount received', '₹ ' + d.amount, 760, true);
+    // divider + thanks
+    ctx.strokeStyle = '#e3e9e6'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(70, 950); ctx.lineTo(W - 70, 950); ctx.stroke();
+    ctx.fillStyle = '#1f6f5c'; ctx.font = 'bold 34px system-ui, sans-serif';
+    ctx.textAlign = 'center'; ctx.fillText('Thank you!', W / 2, 1020);
+    ctx.fillStyle = '#9aa7b4'; ctx.font = '24px system-ui, sans-serif';
+    ctx.fillText('Receipt made free with FeesBook — the digital fees register', W / 2, 1160);
+  }
+
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var amt = Number(document.getElementById('amount').value || 0);
+    draw({
+      inst: document.getElementById('inst').value.trim() || 'Tuition Classes',
+      student: document.getElementById('student').value.trim() || '—',
+      month: monthLabel(document.getElementById('month').value),
+      amount: amt.toLocaleString('en-IN'),
+      mode: document.getElementById('mode').value,
+      rno: nextReceiptNo(),
+      date: new Date().toLocaleDateString('en-IN')
+    });
+    box.hidden = false;
+    box.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  document.getElementById('dl').addEventListener('click', function () {
+    var a = document.createElement('a');
+    a.download = 'fee-receipt.png';
+    a.href = cv.toDataURL('image/png');
+    a.click();
+  });
+
+  function fallbackDownload() {
+    var a = document.createElement('a');
+    a.download = 'fee-receipt.png';
+    a.href = cv.toDataURL('image/png');
+    a.click();
+    alert('Receipt downloaded. Open WhatsApp and attach it from your gallery.');
+  }
+
+  document.getElementById('share').addEventListener('click', function () {
+    cv.toBlob(function (blob) {
+      if (!blob) { fallbackDownload(); return; }
+      var file = new File([blob], 'fee-receipt.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: 'Fee Receipt' }).catch(function (err) {
+          if (!err || err.name !== 'AbortError') fallbackDownload();
+        });
+      } else {
+        fallbackDownload();
+      }
+    }, 'image/png');
+  });
+})();
+</script>
+</body>
+</html>

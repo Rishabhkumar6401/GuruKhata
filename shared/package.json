@@ -1,0 +1,7 @@
+{
+  "name": "feesbook-shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FeesBook shared code (message templates, later receipt renderer + validation) — dependency-free, imported by both web/ and api/.",
+  "type": "module"
+}

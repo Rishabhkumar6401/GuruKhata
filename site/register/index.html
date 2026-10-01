@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fees Register / Fees Book Template – Free Printable for Tuition & Coaching</title>
+  <meta name="description" content="Free printable fees register (fees book) template for tuition teachers and coaching classes in India. Generate a clean monthly A4 fees register for your batch and print it — or switch to the free digital fees book.">
+  <link rel="canonical" href="https://PLACEHOLDER-DOMAIN/register/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Free Printable Fees Register (Fees Book) Template">
+  <meta property="og:description" content="Generate a clean monthly A4 fees register for your tuition class or batch and print it. Free.">
+  <meta property="og:url" content="https://PLACEHOLDER-DOMAIN/register/">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Fees<span>Book</span></a>
+    <nav><a href="/receipt/">Receipt Maker</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Printable Fees Register (Fees Book) Template</h1>
+  <p class="lead">A clean monthly fees register for your class or batch. Fill the details, press Print — done. Free A4 format, works from your phone or computer.</p>
+
+  <div class="card no-print">
+    <form class="tool" id="f">
+      <div>
+        <label for="inst">Class / coaching name</label>
+        <input id="inst" placeholder="e.g. Sharma Tuition Classes" maxlength="40">
+      </div>
+      <div>
+        <label for="batch">Batch (optional)</label>
+        <input id="batch" placeholder="e.g. Class 10 – Evening Batch" maxlength="40">
+      </div>
+      <div>
+        <label for="month">Month</label>
+        <input id="month" type="month">
+      </div>
+      <div>
+        <label for="rows">Number of students (rows)</label>
+        <input id="rows" type="number" min="5" max="80" value="30">
+      </div>
+      <button class="btn btn-primary" type="submit">Generate Register</button>
+    </form>
+  </div>
+
+  <section id="sheet" hidden>
+    <h2 id="sheetTitle" style="text-align:center;margin-bottom:2px"></h2>
+    <p id="sheetSub" style="text-align:center;color:#5b6b7f;margin-top:0"></p>
+    <div class="sheet-scroll"><table class="register" id="tbl"></table></div>
+    <div class="cta-row no-print" style="justify-content:center;margin-top:16px">
+      <button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </section>
+
+  <div class="card no-print">
+    <h3>Writing 30+ names every month?</h3>
+    <p>The digital FeesBook fills itself: students carry over, pending fees total up automatically, and reminders go on WhatsApp in one tap. <a href="/">Join the free pilot →</a></p>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap"><a href="/">FeesBook</a> · <a href="/receipt/">Free Fee Receipt Generator</a></div></footer>
+
+<script>
+(function () {
+  var f = document.getElementById('f');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var inst = document.getElementById('inst').value.trim() || 'Fees Register';
+    var batch = document.getElementById('batch').value.trim();
+    var m = document.getElementById('month').value;
+    var monthLabel = '';
+    if (m && /^\d{4}-\d{2}$/.test(m)) {
+      var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      monthLabel = names[parseInt(m.split('-')[1], 10) - 1] + ' ' + m.split('-')[0];
+    } else if (m) {
+      monthLabel = m;
+    }
+    var rows = Math.min(80, Math.max(5, parseInt(document.getElementById('rows').value, 10) || 30));
+
+    document.getElementById('sheetTitle').textContent = inst;
+    document.getElementById('sheetSub').textContent =
+      [batch, monthLabel ? 'Fees Register — ' + monthLabel : 'Fees Register'].filter(Boolean).join(' · ');
+
+    var html = '<thead><tr>' +
+      '<th style="width:36px">#</th><th>Student Name</th><th style="width:90px">Monthly Fee (₹)</th>' +
+      '<th style="width:80px">Due Date</th><th style="width:90px">Paid On</th>' +
+      '<th style="width:95px">Amount Paid (₹)</th><th style="width:80px">Sign</th></tr></thead><tbody>';
+    for (var i = 1; i <= rows; i++) {
+      html += '<tr><td style="text-align:center;color:#5b6b7f">' + i + '</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+    }
+    html += '</tbody>';
+    document.getElementById('tbl').innerHTML = html;
+    document.getElementById('sheet').hidden = false;
+    document.getElementById('sheet').scrollIntoView({ behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>
