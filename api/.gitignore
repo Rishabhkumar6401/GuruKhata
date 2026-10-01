@@ -1,2 +1,5 @@
 node_modules/
 .env
+
+# Local PGlite database (used when DATABASE_URL is unset)
+.pglite-data/

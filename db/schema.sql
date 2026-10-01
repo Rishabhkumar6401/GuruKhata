@@ -114,3 +114,14 @@ CREATE TABLE IF NOT EXISTS admin_log (
 --   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 -- );
 -- ALTER TABLE students ADD COLUMN IF NOT EXISTS batch_id BIGINT REFERENCES batches(id);
+
+-- ---------------------------------------------------------------------------
+-- API v1 additions (2026-10). Idempotent — safe to re-apply on an existing DB.
+-- ---------------------------------------------------------------------------
+-- Per-tutor receipt counter. Incremented atomically on POST /api/dues/:id/pay
+-- (UPDATE tutors SET receipt_seq = receipt_seq + 1 ... RETURNING) and never
+-- decremented: an un-paid receipt number is NOT reused.
+ALTER TABLE tutors ADD COLUMN IF NOT EXISTS receipt_seq INT NOT NULL DEFAULT 0;
+
+-- How a due was paid: 'upi' | 'cash' | 'bank' | 'other' (NULL while unpaid).
+ALTER TABLE dues ADD COLUMN IF NOT EXISTS payment_mode TEXT;

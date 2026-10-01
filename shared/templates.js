@@ -27,7 +27,8 @@ function inr(amount) {
  * @param {string} p.studentName  - e.g. 'Aarav'
  * @param {string} p.monthLabel   - human label, e.g. 'October 2026' / 'अक्टूबर 2026'
  * @param {number|string} p.amount - e.g. 1500
- * @param {string} p.upiId        - teacher's UPI ID, e.g. 'teacher@upi'
+ * @param {string} [p.upiId]      - teacher's UPI ID, e.g. 'teacher@upi'; when absent
+ *                                  (cash-only tutors) the payment line is omitted
  * @param {string} p.teacherName  - e.g. 'Sunita Ma\'am'
  * @param {('en'|'hi')} [lang='en']
  * @returns {string}
@@ -35,16 +36,16 @@ function inr(amount) {
 export function reminderMessage({ studentName, monthLabel, amount, upiId, teacherName }, lang = 'en') {
   if (lang === 'hi') {
     return (
-      `नमस्ते 🙏 ${studentName} की ${monthLabel} की ट्यूशन फीस ${inr(amount)} देय है। ` +
-      `कृपया UPI से भुगतान करें: ${upiId}\n` +
+      `नमस्ते, ${studentName} की ${monthLabel} की ट्यूशन फीस ${inr(amount)} देय है। ` +
+      (upiId ? `कृपया UPI से भुगतान करें: ${upiId}\n` : '\n') +
       `भुगतान के बाद रसीद भेज दी जाएगी। धन्यवाद!\n` +
       `– ${teacherName}`
     );
   }
   return (
-    `Namaste 🙏 This is a gentle reminder that ${studentName}'s tuition fee of ` +
+    `Namaste! This is a gentle reminder that ${studentName}'s tuition fee of ` +
     `${inr(amount)} for ${monthLabel} is due. ` +
-    `You can pay via UPI: ${upiId}\n` +
+    (upiId ? `You can pay via UPI: ${upiId}\n` : '\n') +
     `A receipt will be shared once paid. Thank you!\n` +
     `– ${teacherName}`
   );
